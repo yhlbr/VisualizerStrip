@@ -13,7 +13,7 @@ namespace VisualizerStrip.Visualization
             return applyMovingAverage(value);
         }
 
-
+        public const int BARS_COUNT = 80;
         private const int HIGHEST_BARS_COUNT = 5;
         private const double GENERAL_MULTIPLIER = 1.75;
         private static double convertValue(SpectrumPointData[] data, double maximum)

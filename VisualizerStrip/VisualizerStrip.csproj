@@ -63,6 +63,7 @@
     <Compile Include="Visualization\ScalingStrategy.cs" />
     <Compile Include="Visualization\SignalSmoother.cs" />
     <Compile Include="Visualization\SpectrumBase.cs" />
+    <Compile Include="Visualization\SpectrumService.cs" />
     <EmbeddedResource Include="Form.resx">
       <DependentUpon>Form.cs</DependentUpon>
     </EmbeddedResource>
