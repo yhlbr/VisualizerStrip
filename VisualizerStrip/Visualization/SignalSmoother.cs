@@ -10,7 +10,9 @@ namespace VisualizerStrip.Visualization
         public static double getSmoothedValue(SpectrumPointData[] data, double maximum)
         {
             double value = convertValue(data, maximum);
-            return applyMovingAverage(value);
+            value = applyMaxLowering(value);
+            value = applyMovingAverage(value);
+            return value;
         }
 
         public const int BARS_COUNT = 80;
@@ -30,6 +32,13 @@ namespace VisualizerStrip.Visualization
             return Math.Min(Math.Max(average, 0), maximum);
         }
 
+
+        private const double MAX_LOWERING_FACTOR = 0.93;
+        private static double applyMaxLowering(double value)
+        {
+            double lastValue = lastValues.LastOrDefault();
+            return Math.Max(lastValue * MAX_LOWERING_FACTOR, value);
+        }
 
         private const int MOVING_AVERAGE_COUNT = 4;
         private static List<double> lastValues = new List<double>();

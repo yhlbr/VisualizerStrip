@@ -8,82 +8,83 @@ using WinformsVisualization.Visualization;
 
 namespace VisualizerStrip.Visualization
 {
-    public delegate void ValueReadyCallback(double result);
 
     public class SpectrumService
     {
-        private WasapiCapture _soundIn;
-        private IWaveSource _source;
-        private DataSpectrum _dataSpectrum;
-        private BasicSpectrumProvider _spectrumProvider;
-        private Timer timer;
-        private ValueReadyCallback callback;
+        private WasapiCapture SoundIn;
+        private IWaveSource Source;
+        private DataSpectrum DataSpectrum;
+        private BasicSpectrumProvider SpectrumProvider;
+        private Timer Timer;
+        private Action<double> Callbacks;
 
         public SpectrumService()
         {
 
             //open the default device 
-            _soundIn = new WasapiLoopbackCapture();
+            SoundIn = new WasapiLoopbackCapture();
             //Our loopback capture opens the default render device by default so the following is not needed
             //_soundIn.Device = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            _soundIn.Initialize();
+            SoundIn.Initialize();
 
-            var soundInSource = new SoundInSource(_soundIn);
+            var soundInSource = new SoundInSource(SoundIn);
 
             SetupSampleSource(soundInSource.ToSampleSource());
 
             // We need to read from our source otherwise SingleBlockRead is never called and our spectrum provider is not populated
-            byte[] buffer = new byte[_source.WaveFormat.BytesPerSecond / 2];
+            byte[] buffer = new byte[Source.WaveFormat.BytesPerSecond / 2];
             soundInSource.DataAvailable += (s, aEvent) =>
                 {
                     int read;
-                    while ((read = _source.Read(buffer, 0, buffer.Length)) > 0) ;
+                    while ((read = Source.Read(buffer, 0, buffer.Length)) > 0) ;
                 };
-            timer = new Timer();
-            timer.Interval = 30;
-            timer.Elapsed += timer_Tick;
+            Timer = new Timer();
+            Timer.Interval = 20;
+            Timer.Elapsed += Timer_Tick;
         }
 
         public void Start()
         {
-            //play the audio
-            _soundIn.Start();
-            timer.Start();
+            SoundIn.Start();
+            Timer.Start();
         }
 
-        public void SetCallback(ValueReadyCallback callback)
+        public void AddCallback(Action<double> callback)
         {
-            this.callback = callback;
+            Callbacks += callback;
         }
 
+        public void RemoveCallback(Action<double> callback)
+        {
+            Callbacks -= callback;
+        }
 
         public void Stop()
         {
-            timer.Stop();
-            if (_soundIn != null)
+            Timer.Stop();
+            if (SoundIn != null)
             {
-                _soundIn.Stop();
-                _soundIn.Dispose();
-                _soundIn = null;
+                SoundIn.Stop();
+                SoundIn.Dispose();
+                SoundIn = null;
             }
-            if (_source != null)
+            if (Source != null)
             {
-                _source.Dispose();
-                _source = null;
+                Source.Dispose();
+                Source = null;
             }
         }
-
 
         private void SetupSampleSource(ISampleSource aSampleSource)
         {
             const FftSize fftSize = FftSize.Fft4096;
             //create a spectrum provider which provides fft data based on some input
-            _spectrumProvider = new BasicSpectrumProvider(aSampleSource.WaveFormat.Channels,
+            SpectrumProvider = new BasicSpectrumProvider(aSampleSource.WaveFormat.Channels,
                 aSampleSource.WaveFormat.SampleRate, fftSize);
 
-            _dataSpectrum = new DataSpectrum(fftSize)
+            DataSpectrum = new DataSpectrum(fftSize)
             {
-                SpectrumProvider = _spectrumProvider,
+                SpectrumProvider = SpectrumProvider,
                 UseAverage = true,
                 BarCount = SignalSmoother.BARS_COUNT,
                 IsXLogScale = true,
@@ -93,15 +94,18 @@ namespace VisualizerStrip.Visualization
             //the SingleBlockNotificationStream is used to intercept the played samples
             var notificationSource = new SingleBlockNotificationStream(aSampleSource);
             //pass the intercepted samples as input data to the spectrumprovider (which will calculate a fft based on them)
-            notificationSource.SingleBlockRead += (s, a) => _spectrumProvider.Add(a.Left, a.Right);
+            notificationSource.SingleBlockRead += (s, a) => SpectrumProvider.Add(a.Left, a.Right);
 
-            _source = notificationSource.ToWaveSource(16);
+            Source = notificationSource.ToWaveSource(16);
         }
 
-
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            this.callback(_dataSpectrum.getIntensity(100));
+            if (Callbacks == null)
+            {
+                return;
+            }
+            Callbacks.Invoke(DataSpectrum.getIntensity(100));
         }
     }
 }
