@@ -41,9 +41,10 @@ namespace WinformsVisualization
             // VolumeLabel
             // 
             this.VolumeLabel.AutoSize = true;
-            this.VolumeLabel.Location = new System.Drawing.Point(12, 9);
+            this.VolumeLabel.Location = new System.Drawing.Point(14, 10);
+            this.VolumeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.VolumeLabel.Name = "VolumeLabel";
-            this.VolumeLabel.Size = new System.Drawing.Size(25, 13);
+            this.VolumeLabel.Size = new System.Drawing.Size(31, 15);
             this.VolumeLabel.TabIndex = 1;
             this.VolumeLabel.Text = "===";
             // 
@@ -51,35 +52,40 @@ namespace WinformsVisualization
             // 
             this.groupBox1.Controls.Add(this.WebsocketURL);
             this.groupBox1.Controls.Add(this.UrlLabel);
-            this.groupBox1.Location = new System.Drawing.Point(12, 25);
+            this.groupBox1.Location = new System.Drawing.Point(14, 29);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(591, 71);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.groupBox1.Size = new System.Drawing.Size(825, 82);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "WebSocket Settings";
             // 
             // WebsocketURL
             // 
-            this.WebsocketURL.Location = new System.Drawing.Point(7, 42);
+            this.WebsocketURL.Location = new System.Drawing.Point(8, 48);
+            this.WebsocketURL.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.WebsocketURL.Name = "WebsocketURL";
-            this.WebsocketURL.Size = new System.Drawing.Size(578, 20);
+            this.WebsocketURL.Size = new System.Drawing.Size(809, 23);
             this.WebsocketURL.TabIndex = 1;
             this.WebsocketURL.TextChanged += new System.EventHandler(this.WebsocketURL_TextChanged);
             // 
             // UrlLabel
             // 
             this.UrlLabel.AutoSize = true;
-            this.UrlLabel.Location = new System.Drawing.Point(6, 25);
+            this.UrlLabel.Location = new System.Drawing.Point(7, 29);
+            this.UrlLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.UrlLabel.Name = "UrlLabel";
-            this.UrlLabel.Size = new System.Drawing.Size(29, 13);
+            this.UrlLabel.Size = new System.Drawing.Size(28, 15);
             this.UrlLabel.TabIndex = 0;
             this.UrlLabel.Text = "URL";
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(12, 103);
+            this.SaveButton.Location = new System.Drawing.Point(14, 119);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(75, 23);
+            this.SaveButton.Size = new System.Drawing.Size(88, 27);
             this.SaveButton.TabIndex = 3;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -87,14 +93,15 @@ namespace WinformsVisualization
             // 
             // Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 133);
+            this.ClientSize = new System.Drawing.Size(852, 153);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.VolumeLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = global::VisualizerStrip.Properties.Resources.Default;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Form";
             this.Text = "VisualizerStrip";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);

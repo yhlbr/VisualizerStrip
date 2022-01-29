@@ -17,6 +17,7 @@ namespace WinformsVisualization
         static void Main()
         {
             Application.EnableVisualStyles();
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.SetCompatibleTextRenderingDefault(false);
 
             context = new TrayAppContext();
@@ -40,9 +41,11 @@ namespace WinformsVisualization
             trayIcon = new NotifyIcon()
             {
                 Icon = Resources.Default,
-                ContextMenu = new ContextMenu(new MenuItem[] {
-                    new MenuItem("Exit", Exit)
-                }),
+                ContextMenuStrip = new ContextMenuStrip(){
+                    Items = {
+                        new ToolStripMenuItem("Exit", null, Exit)
+                    }
+                },
                 Visible = true
             };
             trayIcon.Click += OnClick;
