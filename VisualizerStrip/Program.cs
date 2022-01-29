@@ -55,6 +55,11 @@ namespace WinformsVisualization
 
         private void OnClick(object sender, EventArgs e)
         {
+            // Right click opens ContextMenuStrip
+            if (((MouseEventArgs)e).Button == System.Windows.Forms.MouseButtons.Right) {
+                return;
+            }
+
             Form form = new Form();
             form.Show();
         }
